@@ -56,7 +56,6 @@ app.MapGet("/weatherforecast", (HttpContext httpContext) =>
     return forecast;
 })
 .WithName("GetWeatherForecast")
-.WithOpenApi()
 .RequireAuthorization();
 
 app.MapGet("/claims", (HttpContext httpContext) =>
@@ -66,7 +65,6 @@ app.MapGet("/claims", (HttpContext httpContext) =>
     return httpContext.User.Claims.Select(c => new Claim(c.Type, c.Value));
 })
 .WithName("GetClaims")
-.WithOpenApi()
 .RequireAuthorization();
 
 app.Run();
