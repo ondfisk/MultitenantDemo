@@ -1,0 +1,51 @@
+---
+name: Continuous Integration
+
+"on":
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/ci.yml
+      - src/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/ci.yml
+      - src/**
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    env:
+      CONFIGURATION: Release
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@2016bd2012dba4e32de620c46fe006a3ac9f0602 # v5.0.1
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore Packages
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration "$CONFIGURATION" --no-restore
