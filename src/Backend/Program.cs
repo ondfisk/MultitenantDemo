@@ -68,5 +68,3 @@ app.MapGet("/claims", (HttpContext httpContext) =>
 .RequireAuthorization();
 
 app.Run();
-
-public partial class Program { }
